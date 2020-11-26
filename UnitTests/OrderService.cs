@@ -2,16 +2,16 @@
 {
     public class OrderService
     {
-        private readonly IStorage _storage;
+        private readonly IStorage storage;
 
         public OrderService(IStorage storage)
         {
-            _storage = storage;
+            storage = storage;
         }
 
         public int PlaceOrder(Order order)
         {
-            var orderId = _storage.Store(order);
+            var orderId = storage.Store(order);
             
             // Some other work
 
