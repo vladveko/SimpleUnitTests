@@ -2,12 +2,19 @@
 using NUnit.Framework;
 using Moq;
 using UnitTests;
+using NLog;
 
 namespace ActualTests
 {
     [TestFixture]
     public class MathTests
     {
+        private Logger log;
+        [OneTimeSetUp]
+        public void SetUpLogger()
+        {
+            log = LogManager.GetCurrentClassLogger();
+        }
         [Test]
         public void Add_Add4and3_ResultIs7()
         {
@@ -17,6 +24,7 @@ namespace ActualTests
             int result = MyMath.Add(number1, number2);
 
             Assert.AreEqual(result, 7);
+
         }
 
         [Test]
@@ -38,11 +46,27 @@ namespace ActualTests
 
             Assert.Throws<System.DivideByZeroException>(() => MyMath.Divide(number1, number2));
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string testName = TestContext.CurrentContext.Test.MethodName;
+            string testResult = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+            log.Info($"Test: {testName, -50} | Result: {testResult}");
+        }
     }
 
     [TestFixture]
     public class OrderServiceTests
     {
+        private Logger log;
+
+        [OneTimeSetUp]
+        public void SetUpLogger()
+        {
+            log = LogManager.GetCurrentClassLogger();
+        }
+
         [Test]
         public void PlaceOrder_WhenCalled_StoreTheOrder()
         {
@@ -54,13 +78,28 @@ namespace ActualTests
 
             storage.Verify(s => s.Store(order));
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string testName = TestContext.CurrentContext.Test.MethodName;
+            string testResult = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+            log.Info($"Test: {testName,-50} | Result: {testResult}");
+        }
     }
 
     [TestFixture]
     public class ProductTests
     {
         private Product product;
+        private Logger log;
 
+        [OneTimeSetUp]
+        public void SetUpLogger()
+        {
+            log = LogManager.GetCurrentClassLogger();
+        }
+      
         [SetUp]
         public void SetUp()
         {
@@ -90,12 +129,27 @@ namespace ActualTests
 
             Assert.AreEqual(price * 0.7, result, 0.001);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string testName = TestContext.CurrentContext.Test.MethodName;
+            string testResult = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+            log.Info($"Test: {testName,-50} | Result: {testResult}");
+        }
     }
 
     [TestFixture]
     public class ReservationTests
     {
         private Reservation reservation;
+        private Logger log;
+
+        [OneTimeSetUp]
+        public void SetUpLogger()
+        {
+            log = LogManager.GetCurrentClassLogger();
+        }
 
         [SetUp]
         public void SetUp()
@@ -136,6 +190,14 @@ namespace ActualTests
             var result = reservation.CanBeCancelledBy(newUser);
 
             Assert.IsFalse(result);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string testName = TestContext.CurrentContext.Test.MethodName;
+            string testResult = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+            log.Info($"Test: {testName,-50} | Result: {testResult}");
         }
     }
 }

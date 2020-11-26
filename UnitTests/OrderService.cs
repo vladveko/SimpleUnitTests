@@ -6,7 +6,7 @@
 
         public OrderService(IStorage storage)
         {
-            storage = storage;
+            this.storage = storage;
         }
 
         public int PlaceOrder(Order order)
